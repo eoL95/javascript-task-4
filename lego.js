@@ -1,7 +1,7 @@
 'use strict';
 
 var FUNCTION_PRIORITY = ['and', 'or', 'filterIn', 'sortBy', 'limit', 'select', 'format'];
-exports.isStar = true;
+exports.isStar = false;
 
 exports.query = function (collection) {
     var newCollection = collection;
