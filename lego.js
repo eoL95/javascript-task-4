@@ -1,7 +1,13 @@
 'use strict';
 
-var FUNCTION_PRIORITY = ['and', 'or', 'filterIn', 'sortBy', 'limit', 'format', 'select'];
+var FUNCTION_PRIORITY = ['and', 'or', 'filterIn', 'sortBy', 'select', 'limit', 'format'];
 exports.isStar = false;
+
+function deleteRepeatElements(array) {
+    return array.filter(function (element, index) {
+        return array.indexOf(element) === index;
+    });
+}
 
 exports.query = function (collection) {
     var newCollection = collection;
@@ -50,7 +56,7 @@ exports.filterIn = function (property, values) {
             });
         });
 
-        return newCollection;
+        return deleteRepeatElements(newCollection);
     };
 };
 
@@ -73,7 +79,9 @@ exports.format = function (property, formatter) {
         var newCollection = collection;
 
         newCollection.forEach(function (note) {
-            note[property] = formatter(note[property]);
+            if (note.hasOwnProperty(property)) {
+                note[property] = formatter(note[property]);
+            }
         });
 
         return newCollection;
@@ -97,12 +105,7 @@ if (exports.isStar) {
             var newCollection = [];
 
             filters.forEach(function (filter) {
-                newCollection = newCollection
-                    .concat(filter(collection))
-                    .filter(function (note, index, self) {
-
-                        return self.indexOf(note) === index;
-                    });
+                newCollection = deleteRepeatElements(newCollection.concat(filter(collection)));
             });
 
             return newCollection;
