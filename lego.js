@@ -16,6 +16,7 @@ exports.query = function (collection) {
     functions.sort(function (a, b) {
         return FUNCTION_PRIORITY.indexOf(a.name) - FUNCTION_PRIORITY.indexOf(b.name);
     });
+    console.info(functions);
 
     for (var i = 0; i < functions.length; i++) {
         newCollection = functions[i](newCollection);
@@ -49,14 +50,12 @@ exports.filterIn = function (property, values) {
         var newCollection = [];
 
         collection.forEach(function (note) {
-            values.forEach(function (value) {
-                if (note[property] === value) {
-                    newCollection.push(note);
-                }
-            });
+            if (values.indexOf(note[property]) !== -1) {
+                newCollection.push(note);
+            }
         });
 
-        return deleteRepeatElements(newCollection);
+        return newCollection;
     };
 };
 
