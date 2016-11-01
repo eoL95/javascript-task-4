@@ -4,15 +4,9 @@ var FUNCTION_PRIORITY = ['and', 'or', 'filterIn', 'sortBy', 'select', 'limit', '
 exports.isStar = true;
 
 function deleteRepeatElements(array) {
-    var newArray = [];
-
-    array.forEach(function (element) {
-        if (newArray.indexOf(element) === -1) {
-            newArray.push(element);
-        }
+    return array.filter(function (element, index) {
+        return array.indexOf(element) === index;
     });
-
-    return newArray;
 }
 
 function copyCollection(collection) {
@@ -42,7 +36,6 @@ exports.query = function (collection) {
     functions.sort(function (a, b) {
         return FUNCTION_PRIORITY.indexOf(a.name) - FUNCTION_PRIORITY.indexOf(b.name);
     });
-    console.info(functions);
 
     for (var i = 0; i < functions.length; i++) {
         newCollection = functions[i](newCollection);
@@ -140,13 +133,11 @@ if (exports.isStar) {
         var filters = [].slice.call(arguments);
 
         return function and(collection) {
-            var newCollection = copyCollection(collection);
-
             filters.forEach(function (filter) {
-                newCollection = filter(newCollection);
+                collection = filter(collection);
             });
 
-            return newCollection;
+            return collection;
         };
     };
 }
