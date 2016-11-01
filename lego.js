@@ -4,9 +4,15 @@ var FUNCTION_PRIORITY = ['and', 'or', 'filterIn', 'sortBy', 'select', 'limit', '
 exports.isStar = true;
 
 function deleteRepeatElements(array) {
-    return array.filter(function (element, index) {
-        return array.indexOf(element) === index;
+    var newArray = [];
+
+    array.forEach(function (element) {
+        if (newArray.indexOf(element) === -1) {
+            newArray.push(element);
+        }
     });
+
+    return newArray;
 }
 
 function copyCollection(collection) {
@@ -122,12 +128,11 @@ if (exports.isStar) {
 
         return function or(collection) {
             var newCollection = [];
-
             filters.forEach(function (filter) {
-                newCollection = deleteRepeatElements(newCollection.concat(filter(collection)));
+                newCollection = newCollection.concat(filter(collection));
             });
 
-            return newCollection;
+            return deleteRepeatElements(newCollection);
         };
     };
 
@@ -135,7 +140,7 @@ if (exports.isStar) {
         var filters = [].slice.call(arguments);
 
         return function and(collection) {
-            var newCollection = collection;
+            var newCollection = copyCollection(collection);
 
             filters.forEach(function (filter) {
                 newCollection = filter(newCollection);
