@@ -3,12 +3,6 @@
 var FUNCTION_PRIORITY = ['and', 'or', 'filterIn', 'sortBy', 'select', 'limit', 'format'];
 exports.isStar = true;
 
-function deleteRepeatElements(array) {
-    return array.filter(function (element, index) {
-        return array.indexOf(element) === index;
-    });
-}
-
 function copyCollection(collection) {
     var newCollection = [];
 
@@ -121,11 +115,19 @@ if (exports.isStar) {
 
         return function or(collection) {
             var newCollection = [];
-            filters.forEach(function (filter) {
-                newCollection = newCollection.concat(filter(collection));
+            collection.forEach(function (note) {
+                var isPush = false;
+                filters.forEach(function (filter) {
+                    if (filter(collection).indexOf(note) !== -1) {
+                        isPush = true;
+                    }
+                });
+                if (isPush) {
+                    newCollection.push(note);
+                }
             });
 
-            return deleteRepeatElements(newCollection);
+            return newCollection;
         };
     };
 
