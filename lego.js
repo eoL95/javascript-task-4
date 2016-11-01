@@ -1,7 +1,7 @@
 'use strict';
 
 var FUNCTION_PRIORITY = ['and', 'or', 'filterIn', 'sortBy', 'select', 'limit', 'format'];
-exports.isStar = false;
+exports.isStar = true;
 
 function deleteRepeatElements(array) {
     return array.filter(function (element, index) {
@@ -9,8 +9,28 @@ function deleteRepeatElements(array) {
     });
 }
 
+function copyCollection(collection) {
+    var newCollection = [];
+
+    if (collection === undefined) {
+        return [];
+    }
+
+    collection.forEach(function (note) {
+        var newNote = {};
+        for (var key in note) {
+            if (note[key] !== undefined) {
+                newNote[key] = note[key];
+            }
+        }
+        newCollection.push(newNote);
+    });
+
+    return newCollection;
+}
+
 exports.query = function (collection) {
-    var newCollection = collection;
+    var newCollection = copyCollection(collection);
     var functions = [].slice.call(arguments).slice(1);
 
     functions.sort(function (a, b) {
@@ -35,7 +55,7 @@ exports.select = function () {
             newCollection.push({});
 
             selectedFields.forEach(function (field) {
-                if (note.hasOwnProperty(field)) {
+                if (note.hasOwnProperty(field) && note[field] !== undefined) {
                     newCollection[index][field] = note[field];
                 }
             });
@@ -61,7 +81,7 @@ exports.filterIn = function (property, values) {
 
 exports.sortBy = function (property, order) {
     return function sortBy(collection) {
-        var newCollection = collection;
+        var newCollection = copyCollection(collection);
 
         return newCollection.sort(function (firstNote, secondNote) {
             if (order === 'asc') {
@@ -75,7 +95,7 @@ exports.sortBy = function (property, order) {
 
 exports.format = function (property, formatter) {
     return function format(collection) {
-        var newCollection = collection;
+        var newCollection = copyCollection(collection);
 
         newCollection.forEach(function (note) {
             if (note.hasOwnProperty(property)) {
@@ -89,7 +109,7 @@ exports.format = function (property, formatter) {
 
 exports.limit = function (count) {
     return function limit(collection) {
-        var newCollection = collection;
+        var newCollection = copyCollection(collection);
 
         return newCollection.slice(0, count);
     };
