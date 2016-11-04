@@ -34,6 +34,7 @@ exports.select = function () {
     return function select(collection) {
         return collection.map(function (note) {
             var newNote = {};
+
             selectedFields.forEach(function (field) {
                 if (note.hasOwnProperty(field) && note[field] !== undefined) {
                     newNote[field] = note[field];
