@@ -39,6 +39,7 @@ exports.select = function () {
                     newNote[field] = note[field];
                 }
             });
+            
             return newNote;
         });
     };
