@@ -1,6 +1,14 @@
 'use strict';
 
-var FUNCTION_PRIORITY = ['or', 'and', 'filterIn', 'sortBy', 'select', 'limit', 'format'];
+var FUNCTION_PRIORITY = {
+    'and': 1,
+    'or': 2,
+    'filterIn': 3,
+    'sortBy': 4,
+    'select': 5,
+    'limit': 6,
+    'format': 7
+};
 exports.isStar = true;
 
 function copyCollection(collection) {
@@ -18,7 +26,7 @@ exports.query = function (collection) {
     var functions = [].slice.call(arguments, 1);
 
     functions.sort(function (a, b) {
-        return FUNCTION_PRIORITY.indexOf(a.name) - FUNCTION_PRIORITY.indexOf(b.name);
+        return FUNCTION_PRIORITY[a.name] - FUNCTION_PRIORITY[b.name];
     });
 
     functions.forEach(function (func) {
