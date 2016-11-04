@@ -77,7 +77,7 @@ exports.sortBy = function (property, order) {
                 return firstNote[property] > secondNote[property];
             }
 
-            return secondNote[property] < firstNote[property];
+            return firstNote[property] < secondNote[property];
         });
     };
 };
