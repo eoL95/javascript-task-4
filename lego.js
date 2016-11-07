@@ -74,10 +74,10 @@ exports.sortBy = function (property, order) {
 
         return newCollection.sort(function (firstNote, secondNote) {
             if (order === 'asc') {
-                return firstNote[property] > secondNote[property];
+                return firstNote[property] > secondNote[property] ? 1 : -1;
             }
 
-            return firstNote[property] < secondNote[property];
+            return firstNote[property] < secondNote[property] ? 1 : -1;
         });
     };
 };
