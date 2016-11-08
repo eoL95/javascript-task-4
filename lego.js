@@ -17,7 +17,7 @@ function copyCollection(collection) {
     }
 
     return collection.map(function (note) {
-        return (Object.assign({}, note));
+        return Object.assign({}, note);
     });
 }
 
