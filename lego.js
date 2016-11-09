@@ -57,7 +57,7 @@ exports.select = function () {
 exports.filterIn = function (property, values) {
     return function filterIn(collection) {
         return collection.filter(function (note) {
-            return values.indexOf(note[property]) !== -1
+            return values.indexOf(note[property]) !== -1;
         });
     };
 };
