@@ -56,15 +56,9 @@ exports.select = function () {
 
 exports.filterIn = function (property, values) {
     return function filterIn(collection) {
-        var newCollection = [];
-
-        collection.forEach(function (note) {
-            if (values.indexOf(note[property]) !== -1) {
-                newCollection.push(note);
-            }
+        return collection.filter(function (note) {
+            return values.indexOf(note[property]) !== -1
         });
-
-        return newCollection;
     };
 };
 
@@ -108,20 +102,15 @@ if (exports.isStar) {
         var filters = [].slice.call(arguments);
 
         return function or(collection) {
-            var newCollection = [];
             var filteredCollections = filters.map(function (filter) {
                 return filter(collection);
             });
 
-            collection.forEach(function (note) {
-                if (filteredCollections.some(function (filteredCollection) {
+            return collection.filter(function (note) {
+                return filteredCollections.some(function (filteredCollection) {
                     return filteredCollection.indexOf(note) !== -1;
-                })) {
-                    newCollection.push(note);
-                }
+                });
             });
-
-            return newCollection;
         };
     };
 
